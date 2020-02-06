@@ -17,6 +17,13 @@
 	<tutorials>
 	</tutorials>
 	<methods>
+    	<method name="get_state" qualifiers="const">
+			<return type="Array">
+			</return>
+			<description>
+				Returns an array that represents the current internal state of the random number generator. This is used in conjunction with [method set_state] to save and restore the state.
+			</description>
+		</method>
 		<method name="randf">
 			<return type="float">
 			</return>
@@ -69,6 +76,16 @@
 			</return>
 			<description>
 				Setups a time-based seed to generator.
+			</description>
+		</method>
+		<method name="set_state">
+			<return type="void">
+			</return>
+			<argument index="0" name="state" type="Array">
+			</argument>
+			<description>
+				Restores the state of the generator to [code]state[/code], where [code]state[/code] is the array that was obtained from a previous call to [method get_state].
+				[b]Note:[/b] The state should [b]not[/b] be set to arbitrary values, since the state requires certain qualities to ensure the generator behaves properly. To initialize the generator with arbitrary input, set [member seed] instead.
 			</description>
 		</method>
 	</methods>

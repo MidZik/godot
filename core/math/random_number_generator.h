@@ -47,6 +47,10 @@ public:
 
 	_FORCE_INLINE_ uint64_t get_seed() { return randbase.get_seed(); }
 
+	void set_state(const Array &p_state);
+
+	Array get_state() const;
+
 	_FORCE_INLINE_ void randomize() { randbase.randomize(); }
 
 	_FORCE_INLINE_ uint32_t randi() { return randbase.rand(); }

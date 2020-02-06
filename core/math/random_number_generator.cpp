@@ -37,10 +37,31 @@ void RandomNumberGenerator::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("get_seed"), &RandomNumberGenerator::get_seed);
 	ADD_PROPERTY(PropertyInfo(Variant::INT, "seed"), "set_seed", "get_seed");
 
+	ClassDB::bind_method(D_METHOD("set_state", "state"), &RandomNumberGenerator::set_state);
+	ClassDB::bind_method(D_METHOD("get_state"), &RandomNumberGenerator::get_state);
+
 	ClassDB::bind_method(D_METHOD("randi"), &RandomNumberGenerator::randi);
 	ClassDB::bind_method(D_METHOD("randf"), &RandomNumberGenerator::randf);
 	ClassDB::bind_method(D_METHOD("randfn", "mean", "deviation"), &RandomNumberGenerator::randfn, DEFVAL(0.0), DEFVAL(1.0));
 	ClassDB::bind_method(D_METHOD("randf_range", "from", "to"), &RandomNumberGenerator::randf_range);
 	ClassDB::bind_method(D_METHOD("randi_range", "from", "to"), &RandomNumberGenerator::randi_range);
 	ClassDB::bind_method(D_METHOD("randomize"), &RandomNumberGenerator::randomize);
+}
+
+void RandomNumberGenerator::set_state(const Array &p_state) {
+	ERR_FAIL_COND_MSG(p_state.size() != 2, "State array must contain exactly 2 integers.");
+
+	const Variant &last_seed = p_state.get(0);
+	const Variant &state = p_state.get(1);
+	ERR_FAIL_COND_MSG(last_seed.get_type() != Variant::Type::INT || state.get_type() != Variant::Type::INT, "State array must contain exactly 2 integers.");
+
+	randbase.set_state({ last_seed, state });
+}
+
+Array RandomNumberGenerator::get_state() const {
+	Array result;
+	RandomPCG::State state = randbase.get_state();
+	result.append(state.last_seed);
+	result.append(state.state);
+	return result;
 }
